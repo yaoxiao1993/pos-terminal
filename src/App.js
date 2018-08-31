@@ -21,7 +21,6 @@ class App extends Component {
       for(var i in CartItems){
         if(CartItems[i].barcode===item.barcode){
           CartItems[i].count+=item.count
-          CartItems[i].actualCount+=item.actualCount
           isSameItem = true;
           break;
         }else{
@@ -30,9 +29,8 @@ class App extends Component {
       }
 
       if(item.promotion==='买二送一' && isSameItem===true){
-        console.log(item.promotion==='买三送一' && isSameItem===true)
-        var freeCount = Math.floor(CartItems[i].count / 3);
-        CartItems[i].actualCount=CartItems[i].count-freeCount;
+        var freeCount = Math.floor(CartItems[i].count / 2);
+        CartItems[i].freeCount=freeCount
       }
       
       if(count === CartItems.length){
@@ -40,6 +38,13 @@ class App extends Component {
       }
     }else{
       CartItems.push(item)
+    }
+
+    for(var j in CartItems){
+      if(CartItems[j].freeCount>0){
+      }else{
+        CartItems[j].freeCount=0
+      }
     }
 
     this.setState({
@@ -63,15 +68,15 @@ class App extends Component {
                         <th>单位</th>
                         <th>单价</th>
                         <th>优惠信息</th>
-                        <th>数量</th>
+                        <th>添加数量</th>
+                        <th>赠送数量</th>
                         <th>小计</th> 
                     </tr>
                 </thead>
                 <tbody id="CartTbody">{ 
                   this.state.SelectedItems.map((item,i)=>{
-                  var subTotal = parseFloat(item.actualCount*item.price).toFixed(2)
+                  var subTotal = parseFloat(item.count*item.price).toFixed(2)
                   Total = ((Total*100 + subTotal*100)/100).toFixed(2);
-                // Total = Total + subTotal
                   return <tr key={i}>
                     <td>{item.barcode}</td>
                     <td>{item.name}</td>
@@ -79,6 +84,7 @@ class App extends Component {
                     <td>{item.unit}</td>
                     <td>{item.promotion}</td>
                     <td>{item.count}</td>
+                    <td>{item.freeCount}</td>
                     <td>{subTotal}</td>
                   </tr>    
                   })
