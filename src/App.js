@@ -93,7 +93,6 @@ class App extends Component {
             </table>
         </div>
         <div id="figure"><span>总计：</span><span>{Total}</span></div>
-        <button id="buy" type="submit">确认购买</button>
       </div>
     );
   }
